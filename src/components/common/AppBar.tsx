@@ -25,12 +25,12 @@ const DATA = {
     { href: "/", icon: <HiOutlineHome size={iconSize} />, label: "Home" },
     { href: "/", icon: <HiOutlinePencil size={iconSize} />, label: "Threads" },
     {
-      href: "/",
+      href: "/leaderboards",
       icon: <HiOutlineChartBar size={iconSize} />,
       label: "Leaderboard",
     },
     {
-      href: "/",
+      href: "/profile",
       icon: <HiOutlineUser size={iconSize} />,
       label: "Profile",
     },

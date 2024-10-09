@@ -9,7 +9,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     <div className="max-w-[480px] mx-auto bg-gradient-to-br md:shadow-md min-h-screen dark:border-[1px] dark:border-white">
       <main>{children}</main>
       {pathname === "/" ||
-      pathname === "/history" ||
+      pathname === "/leaderboards" ||
       pathname === "/profile" ? (
         <AppBar />
       ) : null}

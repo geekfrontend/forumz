@@ -6,6 +6,8 @@ import Wrapper from "@/components/common/Wrapper";
 import Home from "@/pages/home";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
+import Leaderboards from "@/pages/leaderboards";
+import Profile from "@/pages/profile";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,26 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Wrapper>
           <Home />
+        </Wrapper>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/leaderboards",
+    element: (
+      <ProtectedRoute>
+        <Wrapper>
+          <Leaderboards />
+        </Wrapper>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectedRoute>
+        <Wrapper>
+          <Profile />
         </Wrapper>
       </ProtectedRoute>
     ),
