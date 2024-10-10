@@ -1,5 +1,7 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Link } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,51 +11,104 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/useToast";
+import { registerSchema } from "../schema";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
-export const description =
-  "A registration form with name, email, and password inside a card. There's an option to sign up with GitHub and a link to log in if you already have an account";
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const Register = () => {
+  const { toast } = useToast();
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { name: "", email: "", password: "" },
+  });
+
+  const onSubmit = async (data: RegisterFormValues) => {
+    console.log(data);
+    toast({
+      variant: "success",
+      description: "Account created successfully!",
+      position: "topCenter",
+    });
+  };
+
   return (
-    <div className="flex flex-col justify-center h-screen">
-      <Card className="w-full max-w-sm mx-auto border-none">
+    <div className="flex flex-col justify-center min-h-screen p-4">
+      <Card className="w-full max-w-sm mx-auto border-none shadow-none">
         <CardHeader>
-          <CardTitle className="text-xl">Register</CardTitle>
+          <CardTitle>Register</CardTitle>
           <CardDescription>
             Enter your information to create an account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Harke" required />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="geekfrontend@gmail.com"
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="******" />
-            </div>
-            <Button type="submit" className="w-full">
-              Create an account
-            </Button>
-          </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="example@email.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="••••••" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full">
+                Create an account
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-sm text-center">
             Already have an account?{" "}
-            <Link to={"/login"} className="underline">
+            <Link to="/login" className="underline">
               Log in
             </Link>
+          </div>
+          <div className="flex justify-center mt-4 ">
+            <ThemeToggle />
           </div>
         </CardContent>
       </Card>
