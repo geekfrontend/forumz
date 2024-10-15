@@ -36,6 +36,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+
       <div className="z-50 min-h-screen p-6 -mt-8 bg-white pb-28 rounded-t-3xl dark:bg-black">
         <div className="grid grid-cols-1 gap-4 mt-4 place-content-center place-items-center">
           {threads.map((thread) => (
