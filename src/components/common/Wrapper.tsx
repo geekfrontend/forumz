@@ -6,7 +6,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
 
   return (
-    <div className="max-w-[480px] mx-auto bg-gradient-to-br md:shadow-md min-h-screen dark:border-[1px] dark:border-white">
+    <div className="max-w-[480px] w-full mx-auto bg-gradient-to-br md:shadow-md min-h-screen dark:border-[1px] dark:border-white">
       <main>{children}</main>
       {pathname === "/" ||
       pathname === "/leaderboards" ||
