@@ -13,21 +13,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute>
-        <Wrapper>
-          <Home />
-        </Wrapper>
-      </ProtectedRoute>
+      <Wrapper>
+        <Home />
+      </Wrapper>
     ),
   },
   {
     path: "/leaderboards",
     element: (
-      <ProtectedRoute>
-        <Wrapper>
-          <Leaderboards />
-        </Wrapper>
-      </ProtectedRoute>
+      <Wrapper>
+        <Leaderboards />
+      </Wrapper>
     ),
   },
   {

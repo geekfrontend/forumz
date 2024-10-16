@@ -1,3 +1,7 @@
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfile } from "@/store/auth/authSlice";
+import { RootState, AppDispatch } from "@/store";
+
 import { useLocation } from "react-router-dom";
 import {
   HiOutlineHome,
@@ -18,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { DrawerTrigger } from "@/components/ui/drawer";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const iconSize: number = 24;
 
@@ -39,57 +44,67 @@ const DATA = {
 };
 
 const AppBar = () => {
+  const dispatch: AppDispatch = useDispatch();
   const { pathname } = useLocation();
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUserProfile());
+    }
+  }, [dispatch]);
   return (
     <div className="fixed bottom-4 w-full max-w-[480px] mx-auto">
       <TooltipProvider>
         <Dock direction="middle">
-          {DATA.navbar.map((item) =>
-            item.href ? (
-              <DockIcon key={item.label}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      to={item.href}
-                      aria-label={item.label}
-                      className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
-                        "size-12 rounded-full",
-                        `${pathname === item.href ? "text-primary" : ""}`
-                      )}
-                    >
-                      {item.icon}
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{item.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </DockIcon>
-            ) : (
-              <DockIcon key={item.label}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DrawerTrigger>
-                      <button
+          {DATA.navbar
+            .filter((item) => item.label !== "Profile" || isLoggedIn)
+            .map((item) =>
+              item.href ? (
+                <DockIcon key={item.label}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        to={item.href}
                         aria-label={item.label}
                         className={cn(
                           buttonVariants({ variant: "ghost", size: "icon" }),
-                          "size-12 rounded-full"
+                          "size-12 rounded-full",
+                          `${pathname === item.href ? "text-primary" : ""}`
                         )}
                       >
                         {item.icon}
-                      </button>
-                    </DrawerTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{item.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </DockIcon>
-            )
-          )}
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{item.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </DockIcon>
+              ) : (
+                <DockIcon key={item.label}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <DrawerTrigger>
+                        <button
+                          aria-label={item.label}
+                          className={cn(
+                            buttonVariants({ variant: "ghost", size: "icon" }),
+                            "size-12 rounded-full"
+                          )}
+                        >
+                          {item.icon}
+                        </button>
+                      </DrawerTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{item.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </DockIcon>
+              )
+            )}
           <Separator orientation="vertical" className="h-full" />
           <DockIcon>
             <Tooltip>

@@ -1,4 +1,8 @@
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { login, fetchUserProfile } from "@/store/auth/authSlice";
+import { RootState, AppDispatch } from "@/store";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link } from "react-router-dom";
@@ -32,6 +36,10 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isLoading } = useSelector((state: RootState) => state.auth);
   const { toast } = useToast();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -40,11 +48,23 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     console.log(data);
-    toast({
-      variant: "success",
-      description: "Login successful!",
-      position: "topCenter",
-    });
+    const resultAction = await dispatch(login(data));
+
+    if (login.fulfilled.match(resultAction)) {
+      dispatch(fetchUserProfile());
+      toast({
+        variant: "success",
+        description: "Login successful",
+        position: "topCenter",
+      });
+      navigate("/");
+    } else if (login.rejected.match(resultAction)) {
+      toast({
+        variant: "destructive",
+        description: "Login failed",
+        position: "topCenter",
+      });
+    }
   };
 
   return (
@@ -85,7 +105,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 Log in
               </Button>
             </form>

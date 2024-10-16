@@ -1,12 +1,17 @@
-import { AuthContext } from "@/contexts/auth-context";
-import { useContext } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const { isLoggedIn, user, token, message, isLoading, isError, isSuccess } =
+    useSelector((state: RootState) => state.auth);
 
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-
-  return context;
+  return {
+    isLoggedIn,
+    user,
+    token,
+    message,
+    isLoading,
+    isError,
+    isSuccess,
+  };
 };

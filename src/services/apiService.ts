@@ -28,7 +28,6 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor response untuk handle error global
 api.interceptors.response.use(
   (response) => {
     return response;

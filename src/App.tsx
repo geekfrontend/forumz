@@ -10,14 +10,15 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthProvider } from "./providers/auth-provider";
-import router from "./router";
+import router from "@/router";
 import { RouterProvider } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { Drawer } from "./components/ui/drawer";
-import DrawerContent from "./components/common/customs/Drawer";
-import TextEditor from "./components/common/customs/TextEditor";
-import { Input } from "./components/ui/input";
+import { Drawer } from "@/components/ui/drawer";
+import DrawerContent from "@/components/common/customs/Drawer";
+import TextEditor from "@/components/common/customs/TextEditor";
+import { Input } from "@/components/ui/input";
+import { Provider } from "react-redux";
+import { store } from "@/store";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -94,16 +95,31 @@ const App = () => {
   return (
     <>
       <Toaster />
-      <Drawer>
-        <DrawerContent>
-          <div className="p-2">
-            <FormComponent />
-          </div>
-        </DrawerContent>
-        <AuthProvider isLoggedIn={true}>
+      <Provider store={store}>
+        <Drawer>
+          <DrawerContent>
+            <div className="p-2">
+              <FormComponent />
+              {/* {isLoggedIn ? (
+                
+              ) : (
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <h3 className="text-2xl font-bold tracking-tight">
+                    Unauthorized
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    You must be logged in to access this.
+                  </p>
+                  <Button className="mt-4">
+                    <Link to="/login">Login</Link>
+                  </Button>
+                </div>
+              )}*/}
+            </div>
+          </DrawerContent>
           <RouterProvider router={router} />
-        </AuthProvider>
-      </Drawer>
+        </Drawer>
+      </Provider>
     </>
   );
 };
